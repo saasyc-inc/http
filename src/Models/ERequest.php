@@ -5,11 +5,11 @@ namespace Yiche\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 use Yiche\TableShard\Models\SapiDbTbl;
 
-class SapiRequestLog extends Model
+class ERequest extends Model
 {
 
     public $timestamps = false;
-    protected $table = 'sapi_request_log';
+    protected $table = 'e_request';
 
     public function __construct(array $attributes = [])
     {

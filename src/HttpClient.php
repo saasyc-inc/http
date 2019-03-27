@@ -3,7 +3,7 @@
 namespace Yiche\Http;
 
 use Yiche\Generate\Generate;
-use Yiche\Http\Models\SapiRequestLog;
+use Yiche\Http\Models\ERequest;
 
 /**
  * 现在时间，毫秒
@@ -23,7 +23,7 @@ if (!function_exists('nowTimeMicro')) {
  * User: lifei
  * Date: 2018-11-28 12:57
  */
-class HttpClientService
+class HttpClient
 {
 
     public $client; //Object
@@ -56,7 +56,7 @@ class HttpClientService
         //todo 写入日志等
         $this->client = new \GuzzleHttp\Client($config);
 
-        $this->log_data['id'] = Generate::id(91);
+        $this->log_data['id'] = Generate::id(61);
         $this->log_data['created_at'] = $this->log_data['updated_at'] = nowTimeMicro();
     }
 
@@ -71,12 +71,12 @@ class HttpClientService
     }
 
     //发送post请求，$type:表单提交或者json，xml
-    public function post($url, $data = [], $type = 'form_params')
+    public function post($url, $data = [], $type = 'json')
     {
         $type = strtolower($type);
         if ($type == 'json') {
             $this->setHeader('Content-Type', 'application/json;charset=UTF-8');
-            $options['body'] = json_encode($data);
+            $options['body'] = $data;
         } elseif ($type == 'form_params') {
             $options['form_params'] = $data;
         } elseif ($type == 'xml') {
@@ -101,8 +101,8 @@ class HttpClientService
         $this->url = $url;
         $this->setLogData($options);
         //  SapiRequestLogJob::dispatch($this->log_data); //分发队列 ->onQueue('low');
-        $sapiRequestLog = new SapiRequestLog;
-        $sapiRequestLog->insert($this->log_data);
+        $e_request = new ERequest;
+        $e_request->insert($this->log_data);
         return $this->res;
     }
 
