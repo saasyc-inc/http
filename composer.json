@@ -1,18 +1,30 @@
 {
-    "name": "yiche/http",
-    "authors": [
-        {
-            "name": "飞 李",
-            "email": "lif@lrwanche.com"
-        }
-    ],
-    "require": {
-    	"php": ">=7.0.0",
-        "guzzlehttp/guzzle": "^6.3"
-    },
-    "autoload": {
-        "psr-4": {
-            "Yiche\\Http\\": "src/"
-        }
+  "name": "yiche/http",
+  "authors": [
+    {
+      "name": "飞 李",
+      "email": "lif@lrwanche.com"
     }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://code.lrwanche.com/yiche/generate"
+    },
+    {
+      "type": "vcs",
+      "url": "https://code.lrwanche.com/yiche/table-shard"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "yiche/table-shard": "^1.0",
+    "yiche/generate": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Yiche\\Http\\": "src/"
+    }
+  }
 }
