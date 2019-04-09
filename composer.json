@@ -6,16 +6,6 @@
       "email": "lif@lrwanche.com"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://code.lrwanche.com/yiche/generate"
-    },
-    {
-      "type": "vcs",
-      "url": "https://code.lrwanche.com/yiche/table-shard"
-    }
-  ],
   "require": {
     "php": ">=7.0.0",
     "guzzlehttp/guzzle": "^6.3",

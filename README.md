@@ -7,7 +7,7 @@ http请求
 
 ## 集成
 ```shell
-composer require yiche/http 1.0
+composer require yiche/http:dev-master
 ```
 
 
