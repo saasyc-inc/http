@@ -9,8 +9,8 @@
   "require": {
     "php": ">=7.0.0",
     "guzzlehttp/guzzle": "^6.3",
-    "yiche/table-shard": "^dev-master",
-    "yiche/generate": "^dev-master"
+    "yiche/table-shard": "dev-master",
+    "yiche/generate": "dev-master"
   },
   "autoload": {
     "psr-4": {
