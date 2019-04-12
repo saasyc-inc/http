@@ -1,6 +1,7 @@
 <?php
 
 namespace Yiche\Http;
+
 use Carbon\Carbon;
 use Yiche\Generate\Generate;
 use Yiche\Http\Models\ERequest;
@@ -35,29 +36,27 @@ class HttpClient
     public $status;
 
     public $log_data = [
-        'id' => 0,
+        'id'          => 0,
         'relation_id' => '',
-        'type' => '2', //请求第三方
-        'method' => '',
-        'path' => '',
-        'query' => '',
-        'status' => '',
-        'body' => '',
-        'cookies' => '',
-        'headers' => '',
-        'ip' => '',
-        'created_at' => '',
-        'updated_at' => '',
+        'type'        => '2', //请求第三方
+        'method'      => '',
+        'path'        => '',
+        'query'       => '',
+        'status'      => '',
+        'body'        => '',
+        'cookies'     => '',
+        'headers'     => '',
+        'ip'          => '',
+        'created_at'  => '',
+        'updated_at'  => '',
         'finish_time' => '',
     ];
+    protected $isSaveLog = true;
 
     public function __construct(array $config = [])
     {
         //todo 写入日志等
         $this->client = new \GuzzleHttp\Client($config);
-
-        $this->log_data['id'] = Generate::id(61);
-        $this->log_data['created_at'] = $this->log_data['updated_at'] = nowTimeMicro();
     }
 
     //发送get请求
@@ -95,15 +94,39 @@ class HttpClient
             $options['headers'] = $this->headers;
         }
         $this->res = $this->client->request($method, $url, $options);
-
         // 写入日志等,队列
         $this->method = $method;
-        $this->url = $url;
-        $this->setLogData($options);
-        //  SapiRequestLogJob::dispatch($this->log_data); //分发队列 ->onQueue('low');
-        $e_request = new ERequest;
-        $e_request->insert($this->log_data);
+        $this->url    = $url;
+
+        // 是否写日志
+        if ($this->getReqSaveLog()) {
+            $e_request = new ERequest;
+            $this->setLogData($options);
+            //  SapiRequestLogJob::dispatch($this->log_data); //分发队列 ->onQueue('low');
+            $this->log_data['id']         = Generate::id(61);
+            $this->log_data['created_at'] = $this->log_data['updated_at'] = nowTimeMicro();
+            $e_request->insert($this->log_data);
+        }
+
         return $this->res;
+    }
+
+    /**
+     * 是否写日志
+     * @param bool $isWrite
+     */
+    public function setReqSaveLog($isWrite = true)
+    {
+        $this->isSaveLog = $isWrite;
+    }
+
+    /**
+     * 写日志状态
+     * @return bool
+     */
+    public function getReqSaveLog()
+    {
+        return $this->isSaveLog;
     }
 
     public function getStatusCode()
@@ -150,8 +173,8 @@ class HttpClient
             $this->log_data['headers'] = $this->headers;
         }
         $this->log_data['method'] = $this->method;
-        $this->log_data['path'] = $this->url;
-        $query = '';
+        $this->log_data['path']   = $this->url;
+        $query                    = '';
         if (isset($options['body'])) {
             $query = $options['body'];
         } elseif (isset($options['form_params'])) {
@@ -160,9 +183,9 @@ class HttpClient
         } elseif (isset($options['multipart'])) {
             $query = $options['multipart'];
         }
-        $this->log_data['query'] = $query;
-        $this->log_data['status'] = $this->getStatusCode();
-        $this->log_data['body'] = $this->getContents();
+        $this->log_data['query']       = $query;
+        $this->log_data['status']      = $this->getStatusCode();
+        $this->log_data['body']        = $this->getContents();
         $this->log_data['finish_time'] = nowTimeMicro();
     }
 
