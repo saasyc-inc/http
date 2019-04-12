@@ -26,3 +26,7 @@ $body = $http->post('https://www.baidu.com', json_encode(['a' => '111']));
 
 ```
 
+# 版本更新
+### 1.1版本
+ - $http->setReqSaveLog(true/false);动态关闭该服务是否写入查询日志
+ - 修复日志写入生成id构造方法放入具体调用生成
